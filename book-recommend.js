@@ -24,7 +24,7 @@ router.get('/', function (req, res) {
     // }
   }
   request(options, function (err, response, body) {
-    // console.log(response.statusCode);
+    // console.log(options);
     if (!err && response.statusCode == 200) {
       // console.log(1);
       // console.log(body);
@@ -57,6 +57,7 @@ router.get('/', function (req, res) {
       res.jsonp(result);
       res.end();
     } else {
+      // console.error(err, '')
       let result = {
         err: true,
         result: {

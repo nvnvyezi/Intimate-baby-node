@@ -13,14 +13,28 @@ router.get('/', (req, res) => {
     if (!err && response.statusCode == 200) {
       const $ = cheerio.load(body);
       let list = $('.sortChannel_nav').find('a');
-      console.log(list);
+      let nameList = [];
+      // console.log(list[0].children[0].data);
+      for (let i = 0; i < list.length; i++) {
+        nameList.push(list[i].children[0].data.trim())
+      }
+      // console.log(nameList);
+      let result = {
+        err: false,
+        result: nameList
+      }
+      res.jsonp(result);
+      res.end();
+    }else {
+      let result = {
+        err: true,
+        result: {
+          err: '爬取原网页失败'
+        }
+      }
+      res.jsonp(result);
+      res.end();
     }
-    let result = {
-      err: false,
-      result: 'sd'
-    }
-    res.jsonp(result);
-    res.end();
   })
 })
 

@@ -43,6 +43,7 @@ router.get('/', function (req, res) {
         str['sort'] = i+1;
         arr.push(str);
       }
+      // console.log(arr, '')
       let result = {
         err: false,
         result: arr
