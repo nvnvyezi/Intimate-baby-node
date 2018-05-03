@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
     url: 'https://m.dingdiann.com/sort/' + list +'/'+ page + '.html',
     method: 'get'
   }
-  console.log(options.url, '')
+  // console.log(options.url, '')
   request(options, (err, response, body) => {
     if (!err && response.statusCode == 200) {
       const $ = cheerio.load(body);
