@@ -11,6 +11,7 @@ const movieRem = require('./movie-recommend');
 const bookList = require('./book-list');
 const allList = require('./list-all');
 const bookSeniorityHome = require('./book-seniority-home')
+const bookSearch = require('./bookSearch');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use('/bookList',bookList);
 app.use('/allList', allList);
 
 app.use('/bookSeniorityHome', bookSeniorityHome);
+app.use('/bookSearch', bookSearch);
 
 app.listen(3000, () => {
   console.log('3000 is running');

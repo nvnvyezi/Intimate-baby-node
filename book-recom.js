@@ -22,7 +22,8 @@ router.get('/', function (req, res) {
         let str = {}
         let name = list[i].children[0].data;
         let name1 = list2[i].children[0].children[0].data;
-        let name2 = list4[i].children[0].data;
+        // console.log(list4[i].children[0])
+        let name2 = list4[i].children.data;
         str['bookName'] = name1;
         str['author'] = name2;
         str['typ'] = name;
