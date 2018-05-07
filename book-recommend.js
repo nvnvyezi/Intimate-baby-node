@@ -9,19 +9,7 @@ router.get('/', function (req, res) {
     url: 'https://www.dingdiann.com/',
     method: 'get',
     // encoding: null,
-    json: true,
-    // headers: {
-    //   'Accept': 'text / html, application/xhtml+xml,application/xml; q=0.9, image/webp,image/apng, */*;q=0.8',
-    //   'Accept-Encoding': 'gzip, deflate, br',
-    //   'Accept-Language': 'zh-CN,zh;q=0.9',
-    //   'Cache-Control': 'max-age=0',
-    //   'Connection': 'keep-alive',
-    //   'Cookie': 'UM_distinctid=16261703f43190-0acc8158809b81-3b7c015b-1fa400-16261703f442f1; CNZZDATA1256857442=1116176056-1522048502-%7C1522048502',
-    //   'Host': 'www.dingdiann.com',
-    //   'If-Modified-Since': 'Sun, 25 Mar 2018 12:48:26 GMT',
-    //   'Upgrade-Insecure-Requests': 1,
-    //   'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
-    // }
+    json: true
   }
   request(options, function (err, response, body) {
     // console.log(options);

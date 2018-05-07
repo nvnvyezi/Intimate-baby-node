@@ -10,6 +10,7 @@ const bookRec = require('./book-recom');
 const movieRem = require('./movie-recommend');
 const bookList = require('./book-list');
 const allList = require('./list-all');
+const bookSeniorityHome = require('./book-seniority-home')
 
 const app = express();
 
@@ -22,6 +23,8 @@ app.use('/movieRem', movieRem);
 app.use('/bookRec', bookRec);
 app.use('/bookList',bookList);
 app.use('/allList', allList);
+
+app.use('/bookSeniorityHome', bookSeniorityHome);
 
 app.listen(3000, () => {
   console.log('3000 is running');
