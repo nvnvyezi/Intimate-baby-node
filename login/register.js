@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
     httpOnly:true,
     maxAge: 72000,
     signed: true,
-    // secure: true,        //标记为与https一起用
+    secure: true,        //标记为与https一起用
     path: '/register'
   })
   // console.log(vfCode)
@@ -25,7 +25,8 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res, next) => {
-  const id = req.body.id || 'nvnvyezi';
+  console.log(req.headers)
+  const id = req.body.id || 'nvnvyezi*';
   const pw = req.body.pw || '521zhuzhu**';
   const code = req.body.code || 'as23';
   const email = req.body.email || '118@qq.com';
@@ -57,7 +58,7 @@ router.post('/', (req, res, next) => {
     })
   }
   regJudge().then((data) => {
-    
+    next();
   }).catch((data) => {
     console.log(data)
     let errArr = ['用户名', '密码', '验证码', '邮箱'];
@@ -68,6 +69,8 @@ router.post('/', (req, res, next) => {
     res.json(result);
     res.end();
   })
+}, (req, res, next) => {
+  
 })
 
 module.exports = router;
