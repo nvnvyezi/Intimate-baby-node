@@ -6,113 +6,148 @@ const iconv = require('iconv-lite');
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
-  req.page = req.query.page || 9;
-  let bookName = req.query.bookName || '万古杀帝';
+  req.page = req.query.page || 0;
+  let bookName = req.query.bookName || '农女致富记';
+  let author = req.query.author || '秦喜儿';
+  // console.log(bookName, author)
   const options = {
-    url: `https://www.biquge5200.cc/modules/article/search.php?searchkey=${encodeURIComponent(bookName)}`,
+    url: `https://www.35xs.com/book/search?keyword=${encodeURIComponent(bookName)}`,
     encoding: null
   }
   request(options, (err, response, body) => {
     if (!err && response.statusCode === 200) {
-      body = iconv.decode(body, 'gbk');
+      body = iconv.decode(body, 'utf8');
       let $ = cheerio.load(body);
-      let result = null;
+      let flag = false;
       let el = $('td');
       if (!el.length) {
-          result = {
-            err: true,
-            data: '没找到',
-            result: '哎呀,1.1错了！'
-          }
-          req.err = result;
+        console.log(4444)
+        let result = {
+          err: true,
+          data: '没找到',
+          result: '哎呀,1.1错了！'
+        }
+        res.json(result);
+        res.end();
+        return;
       } else {
-        let minNum = 0;
-        Array.prototype.forEach.call($('tr'), (item) => {
+        Array.prototype.forEach.call($('tr'), (item, index) => {
           try {
-            if (item.children[1].children[0].children[0].data === bookName) {
-              let num = parseInt(item.children[7].children[0].data);
-              if (num > minNum) {
-                minNum = num;
-                let href = item.children[1].children[0].attribs.href;
-                req.list = href;
+            if (index !== 0) {
+              // console.log(item.childre[0].children[9]);
+              // console.log(item.children[1].children[0].data);
+              if (item.children[0].children[0].children[0].data === bookName && item.children[1].children[0].data == author) {
+                let href = item.children[0].children[0].attribs.href;
+                req.list = `https://www.35xs.com${href}`;
+                console.log(req.list);
               }
-              req.err = null;
             }
           } catch (error) {
-            if (result === null) {
-              result = {
-                err: true,
-                data: err,
-                result: '哎呀,1.2错了！'
-              }
-              req.err = result;
-            }
+            flag = true;
           }
         })
+        if (flag && !req.list) {
+          let result = {
+            err: true,
+            data: '爬到数据，处理出错',
+            result: '哎呀,1.2错了！'
+          }
+          res.json(result);
+          res.end();
+        } else {
+          next();
+        }
       }
     } else {
-      console.log(err, 1)
+      let result = {
+        err: true,
+        data: '爬到数据出错',
+        result: '哎呀,1.3错了！'
+      }
+      res.json(result);
+      res.end();
     }
-    next();
   })
 }, (req, res, next) => {
-  if (req.err !== null) {
-    res.json(req.err);
-    res.end();
-    return ;
-  }
+  // console.log(req.list)
   const options = {
     url: req.list,
     encoding: null
   }
+  let flag = false;
   request(options, (err, response, body) => {
     if (!err && response.statusCode === 200) {
-      body = iconv.decode(body, 'gbk');
+      body = iconv.decode(body, 'utf8');
       let $ = cheerio.load(body);
-      let dd = $('dd');
-      // let arr = [];
-      // for (let i = 9, len = dd.length; i < len; i++) {
-      //   arr.push(dd[i].children[0].attribs.href);
-      // }
-      req.chapter = dd[req.page].children[0].attribs.href;
-      req.err = null;
+      let li = $('.mulu_list').find('li');
+      // console.log(li[li.length - 1].children[0].attribs.href)
+      try {
+        req.chapter = `https://www.35xs.com${ li[req.page].children[0].attribs.href }`;
+      } catch (error) {
+        flag = true;
+      }
+      if (flag && !req.chapter) {
+        let result = {
+          err: true,
+          data: '处理数据出错',
+          result: '哎呀， 2.1错了！'
+        }
+        res.json(result);
+        res.end();
+      } else {
+        next();
+      }
     } else {
       let result = {
         err: true,
         data: err,
-        result: '哎呀， 2错了！'
+        result: '哎呀， 2.2错了！'
       }
-      req.err = result;
+      res.json(result);
+      res.end();
     }
-    next();
   })
 }, (req, res) => {
-  if (req.err !== null) {
-    res.json(req.err);
-    res.end();
-    return ;
-  }
   const options = {
     url: req.chapter,
     encoding: null
   }
+  let flag = false;
   request(options, (err, response, body) => {
     if (!err && response.statusCode === 200) {
-      body = iconv.decode(body, 'gbk');
+      body = iconv.decode(body, 'utf8');
       const $ = cheerio.load(body);
-      let result = {
-        err: false
+      // console.log($('#chaptercontent').text());
+      // console.log($('.story_title').find('h1').text())
+      try {
+        let chapter = $('.story_title').find('h1').text();
+        let text = `${ $('.story_title').find('h1').text() }                      
+        
+                    ${ $('#chaptercontent').text() }`;
+        let result = {
+          err: false,
+          chapter,
+          text: text.replace('闪舞小说网www.35xs.com', '')
+        }
+        res.json(result);
+        res.end();
+      } catch (error) {
+        flag = true;
       }
-      result.bookName = $('.bookname')[0].children[1].children[0].data.trim();
-      result.text = $('#content').text().trim().replace(/\s+/g, '|').split('|');
-      // console.log(result)
-      res.json(result);
-      res.end();
+      if (flag && !chapter && !text) {
+        let result = {
+          err: true,
+          data: '处理出错',
+          result: '哎呀，3.1错了！'
+        }
+        res.json(result);
+        res.end();
+      }
     } else {
       let result = {
         err: true,
         data: err,
-        result: '哎呀，3错了！'
+        result: '哎呀，3.2错了！'
       }
       res.json(result);
       res.end();
