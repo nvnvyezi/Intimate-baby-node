@@ -12,6 +12,7 @@ const cors = require('cors');
 const music = require('./musicList');
 const chapter = require('./chapter');
 const song = require('./song');
+const lyric = require('./lyric');
 // 读取密钥和签名证书
 // const options = {
 //   key: fs.readFileSync('./ca/server.key'),
@@ -36,6 +37,7 @@ app.use(cors());
 app.use('/chapter', chapter);
 app.use('/music', music);
 app.use('/song', song);
+app.use('/lyric', lyric);
 
 app.listen(3001, () => {
   console.log('3001 is running');

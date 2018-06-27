@@ -2,9 +2,7 @@ const express = require('express');
 const mysql = require('../mysql/mysql');
 
 const router = express.Router();
-
 router.get('/', (req, res, next) => {
-  console.log(req.session.activate);
   if (req.session.activate) {
     const info = req.session.activate.split('|nvnv|');
     req.userInfo = {
@@ -12,6 +10,7 @@ router.get('/', (req, res, next) => {
       pw: info[1],
       email: info[2]
     }
+    req.session.destroy();
     next();
   } else {
     let result = {
@@ -22,11 +21,13 @@ router.get('/', (req, res, next) => {
     res.end();
   }
 }, (req, res, next) => {
+  // console.log(req.userInfo);
   mysql.addSql(req.userInfo, (flag, data) => {
     if (flag) {
       let result = {
         err: true,
-        data: '数据库添加失败！'
+        data: '数据库添加失败！',
+        result: data
       }
       res.json(result);
       res.end();

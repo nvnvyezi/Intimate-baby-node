@@ -15,7 +15,7 @@ pool.getConnection(function (err, connection) {
       const addSql = 'insert into userInfo(id, password, email) value(?, ?, ?)';
       const addData = [data.id, data.pw, data.email];
       connection.query(addSql, addData, function (err, rows) {
-        connection.release();   //释放连接
+        // connection.release();   //释放连接
         if (err) {
           cb(true, err);     
         } else {
@@ -27,7 +27,7 @@ pool.getConnection(function (err, connection) {
       const findSql = 'select * from userInfo where id=?';
       const findData = [data];
       connection.query(findSql ,findData, function (err, res) {
-        connection.release();   //释放连接
+        // connection.release();   //释放连接
         if (err) {
           cb(true, err);
         } else {
@@ -35,6 +35,19 @@ pool.getConnection(function (err, connection) {
         }
       })
     }
+    const update = function (data, cb) {
+      const updateSql = 'update userInfo set bookShelf=? where id=?'
+      const updateData = [data.bookShelf, data.id];
+      connection.query(updateSql, updateData, (err, res) => {
+        if (err) {
+          cb(true, err);
+        } else {
+          cb(false, res);
+        }
+      })
+    }
+
+    exports.updateSql = update;
     exports.addSql  = add;
     exports.findSql = find;
   }
