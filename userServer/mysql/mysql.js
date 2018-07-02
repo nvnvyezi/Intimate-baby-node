@@ -46,8 +46,20 @@ pool.getConnection(function (err, connection) {
         }
       })
     }
+    const updateData = function (data, cb) {
+      const updateSql = 'update userInfo set img=?, info=?, sex=?, birth=? where id=?'
+      const updateData = [data.img, data.intro, data.gender, data.birth, data.nickname];
+      connection.query(updateSql, updateData, (err, res) => {
+        if (err) {
+          cb(true, err);
+        } else {
+          cb(false, res);
+        }
+      })
+    }
 
     exports.updateSql = update;
+    exports.updateData = updateData;
     exports.addSql  = add;
     exports.findSql = find;
   }

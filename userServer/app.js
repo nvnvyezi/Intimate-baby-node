@@ -6,8 +6,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-// 接受form-data数据
-const multipart = require('connect-multiparty'); 
 
 // 注册
 const register = require('./login/register');
@@ -16,6 +14,9 @@ const activate = require('./login/activate');
 // 登录
 const login = require('./login/login');
 const logout = require('./login/logout');
+
+// 更改信息
+const upload = require('./user/upload');
 
 // 音乐
 const music = require('./music/musicList');
@@ -51,7 +52,7 @@ app.use(session({
   secret: 'nvnvyezi',
   name: 'ny-id',
   cookie: {
-    maxAge: 72000
+    maxAge: 720000
   }
 }))
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -87,6 +88,14 @@ app.use('/mv', mv);
 app.use('/mvPlay', mvPlay);
 app.use('/mvForward', mvForward);
 app.use('/mvList', mvList);
+
+app.use('/upload', upload);
+// let uploa = multer({storage: storage});
+// app.post('/upload', uploa.array('user', 6), (req, res, next) => {
+//   console.log(req.files, req.body);
+//   res.json('sd');
+//   res.end();
+// });
 
 // app.listen(3000, () => {
 //   console.log('3000 is running');

@@ -31,7 +31,7 @@ function code (req, res, flag, str) {
     } else {
       res.cookie('vfCode', token, {
         httpOnly:true,
-        maxAge: 72000,
+        maxAge: 720000,
         signed: true,
         // secure: true,        //标记为与https一起用
         path: '/login'
@@ -88,7 +88,7 @@ router.post('/',(req, res, next) => {
       if (vfCode === token) {
         res.clearCookie('vfCode', {
           httpOnly:true,
-          maxAge: 72000,
+          maxAge: 720000,
           signed: true,
           // secure: true,        //标记为与https一起用
           path: '/login'
@@ -175,7 +175,7 @@ router.post('/',(req, res, next) => {
     } else {
       res.cookie('Identity', token, {
         httpOnly:true,
-        maxAge: 72000,
+        // maxAge: 720000,
         signed: true,
         // secure: true,        //标记为与https一起用
         path: '/'
