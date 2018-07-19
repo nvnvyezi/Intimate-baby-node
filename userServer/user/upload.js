@@ -92,7 +92,7 @@ router.post('/', (req, res, next) => {
 }, uploa.fields([{name: 'img'}]), (req, res, next) => {
   let img = null;
   if (req.file === undefined) {
-    img = `http://193.112.4.143/img/${req.body.img}`;
+    img = `${req.body.img}`;
   } else {
     img = `http://193.112.4.143/img/${req.file[0].filename}`;
     let result = {
@@ -100,6 +100,7 @@ router.post('/', (req, res, next) => {
       data: '图片太大了,请换个小图'
     }
     if (req.file[0].size > 10240) {
+      getIdentity(rea, res);
       res.json(result);
       res.end();
       return ;
@@ -118,11 +119,13 @@ router.post('/', (req, res, next) => {
   // console.log(data);
   mysql.findSql(data.nickname, (flag, dat) => {
     if (flag) {
+      getIdentity(rea, res);
       res.json({err: true, data: '数据库查找错误'});
       res.end();
       return ;
     } else {
       if (dat.length == 0) {
+        getIdentity(rea, res);
         res.json({err: true, data: '没有此用户'});
         res.end();
         return ;
@@ -133,6 +136,7 @@ router.post('/', (req, res, next) => {
             res.end();
             return ;
           } else {
+            getIdentity(rea, res);
             let result = {
 							err: false,
 							data: '更改成功'

@@ -17,6 +17,8 @@ const logout = require('./login/logout');
 
 // 更改信息
 const upload = require('./user/upload');
+const comments = require('./user/comments');
+const sendCom = require('./user/sendCom');
 
 // 音乐
 const music = require('./music/musicList');
@@ -89,7 +91,12 @@ app.use('/mvPlay', mvPlay);
 app.use('/mvForward', mvForward);
 app.use('/mvList', mvList);
 
+app.use('/getcom', sendCom);
 app.use('/upload', upload);
+app.use('/comments',bodyParser.json({
+  limit: '1kb', //请求最大数据量
+  strict: true   //解析array，object格式
+}), comments);
 // let uploa = multer({storage: storage});
 // app.post('/upload', uploa.array('user', 6), (req, res, next) => {
 //   console.log(req.files, req.body);
