@@ -62,12 +62,12 @@ router.get('/', (req, res) => {
 
 router.post('/',(req, res, next) => {
   // console.log(req.headers.origin)
-  if (req.headers.origin === 'http://127.0.0.1:8080') {
+  if (req.headers.origin === 'http://localhost:8080') {
     let register = req.signedCookies.register;
     let secret = fs.readFileSync(path.join(__dirname, '../ca/server.key'), 'utf-8');
     jwt.verify(register, secret, {algorithm: 'HS512'}, (err, data) => {
       if (err) {
-        code(req, res, true, 'token 错误');
+        code(req, res, true, '请再试一次');
         return ;
       } else {
         let currentTime = Math.floor(Date.now() / 1000); 
@@ -160,9 +160,21 @@ router.post('/',(req, res, next) => {
       return;
     } else {
       if (!data.length) {
-        next();
+        mysql.findSql(req.email, (flag, data) => {
+          if (flag) {
+            code(req, res, true, '数据库查找错误,验证码更新4');
+            return;
+          } else {
+            if (!data.length) {
+              next();
+            } else {
+              code(req, res, true, '邮箱存在');
+              return ;
+            }
+          }
+        }, 'email');
       } else {
-        code(req, res, true, '账号存在，验证码更新6');
+        code(req, res, true, '账号存在');
         return ;
       }
     }
@@ -186,7 +198,7 @@ router.post('/',(req, res, next) => {
     // 收件人
     to: '1187128658@qq.com',
     // 邮件内容，HTML格式
-    text: '点击激活：https://127.0.0.1:3001/activate' //接收激活请求的链接
+    text: '点击激活：http://127.0.0.1:3001/activate' //接收激活请求的链接
   };
   transporter.sendMail(mail, function(error, info){
     if(error) {

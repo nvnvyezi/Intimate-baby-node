@@ -78,7 +78,7 @@ router.post('/', (req, res, next) => {
       return ;
     } else {
       getIdentity (req, res)
-      res.json({err: true, data: '添加成功'});
+      res.json({err: false, data: '添加成功'});
       res.end();
       return ;
     }

@@ -37,8 +37,8 @@ pool.getConnection(function (err, connection) {
       })
     }
 
-    const find  = function (data, cb) {
-      const findSql = 'select * from userInfo where id=?';
+    const find  = function (data, cb, id = 'id') {
+      const findSql = `select * from userInfo where ${id}=?`;
       const findData = [data];
       connection.query(findSql ,findData, function (err, res) {
         // connection.release();   //释放连接
