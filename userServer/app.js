@@ -46,6 +46,7 @@ const httpServer = http.createServer(app);
 app.use(bodyParser.json())
 app.use(cors({
   origin: 'http://localhost:8080',
+  // origin: 'http://193.112.4.143',
   credentials: true  // 是否带cookie
 }));
 // app.use(multipart());
@@ -114,6 +115,6 @@ httpsServer.listen(3002, () => {
 })
 
 // 开启http服务
-httpServer.listen(3001, () => {
-  console.log(`httpServer is 3001`);
+httpServer.listen(3003, () => {
+  console.log(`httpServer is 3003`);
 })

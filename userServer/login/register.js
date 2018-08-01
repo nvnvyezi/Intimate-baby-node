@@ -70,7 +70,7 @@ router.post('/',(req, res, next) => {
         code(req, res, true, '请再试一次');
         return ;
       } else {
-        let currentTime = Math.floor(Date.now() / 1000); 
+        let currentTime = Math.floor(Date.now() / 1000);
         // let userCode = data.vfCode;
         if (data.exp <= currentTime) {
           code(req, res, true, '验证码过期');
@@ -198,7 +198,7 @@ router.post('/',(req, res, next) => {
     // 收件人
     to: '1187128658@qq.com',
     // 邮件内容，HTML格式
-    text: '点击激活：http://127.0.0.1:3001/activate' //接收激活请求的链接
+    text: '点击激活：http://lcoalhost:8080/activate' //接收激活请求的链接
   };
   transporter.sendMail(mail, function(error, info){
     if(error) {
